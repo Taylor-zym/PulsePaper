@@ -1,0 +1,26 @@
+# Local credentials and personal data
+config/settings.json
+gemini/config.json
+data/
+.env
+.env.*
+!.env.example
+*.log
+*.zip
+*.bak
+*.backup
+
+# Local tools and generated files
+.claude/
+.vscode/
+.pytest_cache/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+build/
+dist/
+*.egg-info/
+
+# Local planning notes
+docs/superpowers/

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PulsePaper</title>
+  <link rel="icon" type="image/png" href="/config/logo.png">
+  <link rel="stylesheet" href="/static/workflow.css">
+</head>
+<body data-page="workflow">
+  <section class="auth-gate" id="authGate" aria-live="polite">
+    <form class="auth-card" id="loginForm" autocomplete="off">
+      <h2>PulsePaper 登录</h2>
+      <p>请输入账号和密码后继续使用工作流。</p>
+      <label class="field">
+        <span>账号</span>
+        <input id="loginUser" type="text" required>
+      </label>
+      <label class="field">
+        <span>密码</span>
+        <input id="loginPass" type="password" required>
+      </label>
+      <button id="loginSubmit" class="start" type="submit">登录</button>
+      <p class="auth-error" id="loginError"></p>
+    </form>
+  </section>
+
+  <main class="app">
+    <section class="config">
+      <div class="config-header">
+        <div class="config-header-main">
+          <h1 class="brand-title">
+            <img src="/config/logo.png" alt="PulsePaper logo" class="brand-logo">
+            <span>PulsePaper</span>
+          </h1>
+          <p id="statusMessage">等待开始</p>
+          <p class="account-chip" id="accountMeta">当前账号未登录</p>
+        </div>
+        <div class="header-actions">
+          <label class="theme-switch" for="themeSwitch" title="切换昼夜主题">
+            <input id="themeSwitch" type="checkbox" role="switch" aria-label="切换白天模式">
+            <span class="theme-switch-icons" aria-hidden="true">
+              <span class="theme-icon theme-icon-moon">☾</span>
+              <span class="theme-icon theme-icon-sun">☀</span>
+            </span>
+          </label>
+          <button id="logoutButton" class="ghost" type="button">退出</button>
+        </div>
+      </div>
+
+      <nav class="page-nav" aria-label="页面导航">
+        <a class="page-nav-link active" href="/workflow">工作流</a>
+        <a class="page-nav-link" href="/bindings">我的绑定</a>
+        <a class="page-nav-link" id="adminNavLink" href="/admin/users" hidden>用户管理</a>
+      </nav>
+
+      <label class="field">
+        <span>大模型api</span>
+        <input id="keywordBaseUrl" type="text" placeholder="留空则使用 默认config">
+      </label>
+
+      <label class="field">
+        <span>模型（Model）</span>
+        <select id="keywordModel">
+          <option value="gpt-5.6-sol">gpt-5.6-sol</option>
+          <option value="gpt-5.6-terra">gpt-5.6-terra</option>
+          <option value="gpt-5.6-luna">gpt-5.6-luna</option>
+        </select>
+      </label>
+
+      <details class="source-panel">
+        <summary>来源配置</summary>
+        <section class="source-section">
+          <p class="panel-note">来源 Key 可在“我的绑定”页按账号配置；未单独绑定时，Springer / Elsevier / IEEE 会回退到全局配置。</p>
+          <div class="source-grid">
+            <div class="source-card" id="sourceCardArxiv">
+              <label class="source-toggle" for="toggleArxiv">
+                <div>
+                  <strong>arXiv</strong>
+                  <small></small>
+                </div>
+                <input id="toggleArxiv" type="checkbox" checked>
+              </label>
+              <label class="field compact">
+                <span>Query</span>
+                <input id="arxivQuery" type="text" value="cs.AI+cs.CV+cs.LG+cs.CL">
+              </label>
+            </div>
+
+            <div class="source-card" id="sourceCardSpringer">
+              <label class="source-toggle" for="toggleSpringer">
+                <div>
+                  <strong>Springer</strong>
+                  <small>关键词检索</small>
+                </div>
+                <input id="toggleSpringer" type="checkbox" checked>
+              </label>
+            </div>
+
+            <div class="source-card" id="sourceCardElsevier">
+              <label class="source-toggle" for="toggleElsevier">
+                <div>
+                  <strong>Elsevier</strong>
+                  <small>关键词检索</small>
+                </div>
+                <input id="toggleElsevier" type="checkbox" checked>
+              </label>
+            </div>
+
+            <div class="source-card" id="sourceCardIEEE">
+              <label class="source-toggle" for="toggleIEEE">
+                <div>
+                  <strong>IEEE</strong>
+                  <small>关键词检索（单次最多 100 篇）</small>
+                </div>
+                <input id="toggleIEEE" type="checkbox" checked>
+              </label>
+            </div>
+          </div>
+        </section>
+      </details>
+
+      <details class="memory-panel">
+        <summary>会话记忆</summary>
+        <div class="history-list" id="historyList">
+          <div class="empty">暂无历史推荐</div>
+        </div>
+      </details>
+
+      <details class="advanced">
+        <summary>高级选项</summary>
+
+        <div class="grid two">
+          <label class="field">
+            <span>Top-K</span>
+            <input id="recommendCount" type="number" min="1" max="20" step="1" value="8">
+          </label>
+
+          <label class="field">
+            <span>Keyword Count</span>
+            <input id="selectedKeywordCount" type="number" min="1" max="5" step="1" value="3">
+          </label>
+
+          <label class="field">
+            <span>Sample Ratio</span>
+            <input id="sampleRatio" type="number" min="0.1" max="1" step="0.05" value="0.9">
+          </label>
+
+          <label class="field">
+            <span>Pool / Source</span>
+            <input id="candidatePool" type="number" min="1" max="200" step="1" value="200">
+          </label>
+
+          <label class="field">
+            <span>Extra Keyword Count</span>
+            <input id="extraKeywordCount" type="number" min="1" max="5" step="1" value="3">
+          </label>
+
+          <label class="field">
+            <span>Extra Pool / Source</span>
+            <input id="extraCandidatePool" type="number" min="1" max="200" step="1" value="20">
+          </label>
+        </div>
+
+        <label class="field toggle-field" for="writeToZotero">
+          <span>写入 Zotero</span>
+          <input id="writeToZotero" type="checkbox">
+        </label>
+
+        <label class="field">
+          <span>附加关键词 / 一句话描述</span>
+          <textarea id="extraKeywordInput" spellcheck="false" placeholder="可输入额外关键词，或一句话描述想补充的研究方向；系统会用当前配置的大模型提炼为额外检索词。"></textarea>
+        </label>
+
+        <label class="field">
+          <span>Ignore Paths</span>
+          <textarea id="ignorePaths" spellcheck="false">PulsePaper/</textarea>
+        </label>
+      </details>
+
+      <button id="startButton" class="start" type="button">开始</button>
+    </section>
+
+    <section class="main">
+      <section class="terminal-card">
+        <div class="terminal-head">
+          <div class="terminal-title">
+            <div class="terminal-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="terminal-heading">
+              <strong>Workflow Terminal</strong>
+              <span id="terminalMeta">等待任务开始</span>
+            </div>
+          </div>
+          <strong id="statusBadge">idle</strong>
+        </div>
+        <div class="terminal-body" id="terminalOutput"></div>
+      </section>
+
+      <section class="results-card">
+        <div class="results-head">
+          <div class="results-title">
+            <h2>Recommended Papers</h2>
+            <span id="resultsCount">0</span>
+          </div>
+          <label class="results-filter">
+            <span>Source</span>
+            <select id="resultSourceFilter">
+              <option value="all">From</option>
+              <option value="arXiv">arXiv</option>
+              <option value="Springer">Springer</option>
+              <option value="Elsevier">Elsevier</option>
+              <option value="IEEE">IEEE</option>
+            </select>
+          </label>
+        </div>
+        <div class="results-list" id="resultsGrid"></div>
+      </section>
+    </section>
+  </main>
+
+  <section class="guide-modal" id="guideModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="guideTitle">
+    <div class="guide-backdrop" data-guide-close="true"></div>
+    <article class="guide-card" role="document">
+      <header class="guide-head">
+        <div class="guide-window-dots">
+          <button class="guide-close-dot" id="guideCloseButton" type="button" aria-label="关闭说明">×</button>
+          <span class="guide-window-dot guide-window-dot-min" aria-hidden="true"></span>
+          <span class="guide-window-dot guide-window-dot-max" aria-hidden="true"></span>
+        </div>
+      </header>
+      <div class="guide-brand">
+        <img src="/config/logo.png" alt="PulsePaper logo" class="guide-logo">
+        <div>
+          <h2 id="guideTitle">欢迎使用 PulsePaper</h2>
+          <p id="guideSubtitle">智能论文推荐助手</p>
+        </div>
+      </div>
+      <div class="guide-content" id="guideContent"></div>
+      <footer class="guide-foot">
+        <a class="guide-link" href="https://www.zotero.org/settings/keys" target="_blank" rel="noreferrer">获取 Zotero API</a>
+        <button class="start guide-action" id="guideConfirmButton" type="button">我知道了</button>
+      </footer>
+    </article>
+  </section>
+
+  <section class="guide-modal mode-modal" id="sentenceModeModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="sentenceModeTitle">
+    <div class="guide-backdrop" data-sentence-mode-close="cancel"></div>
+    <article class="guide-card mode-card" role="document">
+      <header class="guide-head">
+        <div class="guide-window-dots">
+          <button class="guide-close-dot" id="sentenceModeCloseButton" type="button" aria-label="关闭选择">×</button>
+          <span class="guide-window-dot guide-window-dot-min" aria-hidden="true"></span>
+          <span class="guide-window-dot guide-window-dot-max" aria-hidden="true"></span>
+        </div>
+      </header>
+      <div class="mode-body">
+        <p class="mode-eyebrow">检索模式选择</p>
+        <h2 id="sentenceModeTitle">检测到你输入了附加关键词或一句话</h2>
+        <p class="mode-copy">可以直接把这句话当作检索语句，也可以继续使用现有流程，先从 Zotero 语料生成关键词，再补充额外检索词。</p>
+        <div class="mode-options">
+          <button class="mode-option mode-option-primary" id="sentenceModeDirectButton" type="button">
+            <strong>直接一句话检索</strong>
+            <span>跳过 Zotero 关键词生成，仅基于当前输入提炼并检索。</span>
+          </button>
+          <button class="mode-option" id="sentenceModeGeneratedButton" type="button">
+            <strong>继续关键词生成</strong>
+            <span>保留原有流程，再把当前输入扩展成额外关键词。</span>
+          </button>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <script src="/static/app_shared.js"></script>
+  <script src="/static/workflow.js"></script>
+</body>
+</html>

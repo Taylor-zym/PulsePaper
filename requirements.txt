@@ -1,0 +1,8 @@
+Flask>=3.0,<4
+flask-cors>=4,<7
+pyzotero>=1.5,<2
+requests>=2.31,<3
+feedparser>=6,<7
+arxiv>=2,<3
+numpy>=1.26,<3
+sentence-transformers>=3,<6

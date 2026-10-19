@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PulsePaper · 用户管理</title>
+  <link rel="icon" type="image/png" href="/config/logo.png">
+  <link rel="stylesheet" href="/static/workflow.css">
+</head>
+<body data-page="admin-users">
+  <section class="auth-gate" id="authGate" aria-live="polite">
+    <form class="auth-card" id="loginForm" autocomplete="off">
+      <h2>PulsePaper 登录</h2>
+      <p>请输入账号和密码后继续使用工作流。</p>
+      <label class="field">
+        <span>账号</span>
+        <input id="loginUser" type="text" required>
+      </label>
+      <label class="field">
+        <span>密码</span>
+        <input id="loginPass" type="password" required>
+      </label>
+      <button id="loginSubmit" class="start" type="submit">登录</button>
+      <p class="auth-error" id="loginError"></p>
+    </form>
+  </section>
+
+  <main class="app app-single">
+    <section class="config page-card">
+      <div class="config-header">
+        <div class="config-header-main">
+          <h1 class="brand-title">
+            <img src="/config/logo.png" alt="PulsePaper logo" class="brand-logo">
+            <span>PulsePaper</span>
+          </h1>
+          <p id="statusMessage">管理员用户管理</p>
+        </div>
+        <div class="header-actions">
+          <label class="theme-switch" for="themeSwitch" title="切换昼夜主题">
+            <input id="themeSwitch" type="checkbox" role="switch" aria-label="切换白天模式">
+            <span class="theme-switch-icons" aria-hidden="true">
+              <span class="theme-icon theme-icon-moon">☾</span>
+              <span class="theme-icon theme-icon-sun">☀</span>
+            </span>
+          </label>
+          <button id="logoutButton" class="ghost" type="button">退出</button>
+        </div>
+      </div>
+
+      <nav class="page-nav" aria-label="页面导航">
+        <a class="page-nav-link" href="/workflow">Workflow</a>
+        <a class="page-nav-link" href="/bindings">我的绑定</a>
+        <a class="page-nav-link active" id="adminNavLink" href="/admin/users">用户管理</a>
+      </nav>
+
+      <section class="admin-panel page-section" id="adminPanel">
+        <div class="section-head inline-head">
+          <div>
+            <h2>管理员用户管理</h2>
+            <p>创建用户、调整每日检索次数并删除账号。</p>
+          </div>
+        </div>
+        <form class="grid two" id="adminCreateUserForm" autocomplete="off">
+          <label class="field">
+            <span>用户名</span>
+            <input id="adminNewUsername" type="text" required>
+          </label>
+          <label class="field">
+            <span>初始密码</span>
+            <input id="adminNewPassword" type="password" required>
+          </label>
+          <label class="field">
+            <span>每日检索次数</span>
+            <input id="adminDailySearchLimit" type="number" min="0" step="1" value="3">
+          </label>
+          <button id="adminCreateUserButton" class="start" type="submit">创建用户</button>
+        </form>
+        <p class="panel-note" id="adminUserStatus">仅管理员可见。</p>
+        <div class="history-list user-list" id="adminUserList">
+          <div class="empty">暂无用户</div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="/static/app_shared.js"></script>
+  <script src="/static/admin_users.js"></script>
+</body>
+</html>

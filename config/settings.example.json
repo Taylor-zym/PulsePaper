@@ -1,0 +1,37 @@
+{
+  "auth": {
+    "admin_user": "admin",
+    "admin_password": ""
+  },
+  "zotero": {
+    "library_id": "",
+    "api_key": ""
+  },
+  "providers": {
+    "gemini_api_key": "",
+    "keyword_api_key": "",
+    "springer_api_key": "",
+    "elsevier_api_key": "",
+    "ieee_api_key": "",
+    "easyscholar_secret_key": ""
+  },
+  "workflow": {
+    "include_arxiv": true,
+    "include_springer": false,
+    "include_elsevier": false,
+    "include_ieee": false,
+    "write_to_zotero": false,
+    "arxiv_query": "cs.AI+cs.CV+cs.LG+cs.CL",
+    "zotero_ignore": "",
+    "sample_ratio": 0.9,
+    "selected_keyword_count": 3,
+    "candidate_pool_per_source": 200,
+    "top_k": 8,
+    "embedding_device": "auto",
+    "embedding_proxy": ""
+  },
+  "keyword_service": {
+    "base_url": "https://api.anthropic.com",
+    "model": "claude-3-5-haiku-latest"
+  }
+}

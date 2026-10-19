@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PulsePaper · 我的绑定</title>
+  <link rel="icon" type="image/png" href="/config/logo.png">
+  <link rel="stylesheet" href="/static/workflow.css">
+</head>
+<body data-page="bindings">
+  <section class="auth-gate" id="authGate" aria-live="polite">
+    <form class="auth-card" id="loginForm" autocomplete="off">
+      <h2>PulsePaper 登录</h2>
+      <p>请输入账号和密码后继续使用工作流。</p>
+      <label class="field">
+        <span>账号</span>
+        <input id="loginUser" type="text" required>
+      </label>
+      <label class="field">
+        <span>密码</span>
+        <input id="loginPass" type="password" required>
+      </label>
+      <button id="loginSubmit" class="start" type="submit">登录</button>
+      <p class="auth-error" id="loginError"></p>
+    </form>
+  </section>
+
+  <main class="app app-single">
+    <section class="config page-card">
+      <div class="config-header">
+        <div class="config-header-main">
+          <h1 class="brand-title">
+            <img src="/config/logo.png" alt="PulsePaper logo" class="brand-logo">
+            <span>PulsePaper</span>
+          </h1>
+          <p id="statusMessage">管理当前账号绑定</p>
+        </div>
+        <div class="header-actions">
+          <label class="theme-switch" for="themeSwitch" title="切换昼夜主题">
+            <input id="themeSwitch" type="checkbox" role="switch" aria-label="切换白天模式">
+            <span class="theme-switch-icons" aria-hidden="true">
+              <span class="theme-icon theme-icon-moon">☾</span>
+              <span class="theme-icon theme-icon-sun">☀</span>
+            </span>
+          </label>
+          <button id="logoutButton" class="ghost" type="button">退出</button>
+        </div>
+      </div>
+
+      <nav class="page-nav" aria-label="页面导航">
+        <a class="page-nav-link" href="/workflow">Workflow</a>
+        <a class="page-nav-link active" href="/bindings">我的绑定</a>
+        <a class="page-nav-link" id="adminNavLink" href="/admin/users" hidden>用户管理</a>
+      </nav>
+
+      <section class="account-panel page-section">
+        <div class="section-head inline-head">
+          <div>
+            <h2>我的绑定</h2>
+            <p id="accountMeta">当前账号未加载</p>
+          </div>
+          <button id="saveBindingsButton" class="ghost" type="button">保存绑定</button>
+        </div>
+        <p class="panel-note">Zotero 绑定用于当前账号工作流；来源 Key 为可选项，仅在你需要覆盖全局配置时填写。</p>
+        <div class="grid two binding-core-grid">
+          <label class="field">
+            <span>Zotero ID</span>
+            <input id="bindingZoteroId" type="text" placeholder="请输入当前账号的 Zotero ID">
+          </label>
+          <label class="field">
+            <span>Zotero Key</span>
+            <input id="bindingZoteroKey" type="password" placeholder="留空表示不修改">
+          </label>
+        </div>
+        <details class="source-panel binding-optional-panel">
+          <summary>可选来源 Key（用于覆盖全局配置）</summary>
+          <section class="source-section">
+            <p class="panel-note">Springer / Elsevier / IEEE 在未绑定时会回退到全局配置，所以这里不是必填项。</p>
+            <div class="source-grid binding-source-grid">
+              <div class="source-card" data-active="true">
+                <label class="field compact">
+                  <span>Springer Key</span>
+                  <input id="bindingSpringerKey" type="password" placeholder="留空表示不修改">
+                </label>
+              </div>
+              <div class="source-card" data-active="true">
+                <label class="field compact">
+                  <span>Elsevier Key</span>
+                  <input id="bindingElsevierKey" type="password" placeholder="留空表示不修改">
+                </label>
+              </div>
+              <div class="source-card" data-active="true">
+                <label class="field compact">
+                  <span>IEEE Key</span>
+                  <input id="bindingIEEEKey" type="password" placeholder="留空表示不修改">
+                </label>
+              </div>
+            </div>
+          </section>
+        </details>
+        <p class="panel-note" id="bindingsStatus">Zotero 不会回退到全局配置；Springer / Elsevier / IEEE 在未绑定时可回退到全局配置。</p>
+      </section>
+    </section>
+  </main>
+
+  <script src="/static/app_shared.js"></script>
+  <script src="/static/bindings.js"></script>
+</body>
+</html>
